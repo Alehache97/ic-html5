@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git branch:'master',url:'https://github.com/Alehache97/ic-html5.git'
+                git branch:'master',url:'https://github.com/josedom24/ic-travis-html5.git'
             }
         }
         
