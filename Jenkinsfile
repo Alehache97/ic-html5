@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'josedom24/debian-npm'
+            image 'josedom24/debian-npm'  // Usa la imagen de Docker que ya tiene Surge instalado
             args '-u root:root'
         }
     }
@@ -17,24 +17,7 @@ pipeline {
             }
         }
        
-        stage('Change Repositories to HTTPS') {
-            steps {
-                script {
-                    sh """
-                    sed -i 's/http:/https:/g' /etc/apt/sources.list
-                    apt update
-                    """
-                }
-            }
-        }
-       
-        stage('Install Surge') {
-            steps {
-                script {
-                    sh 'npm install -g surge'
-                }
-            }
-        }
+        // Se eliminó la etapa de cambiar repositorios a HTTPS ya que no es necesaria.
        
         stage('Install Pip') {
             steps {
@@ -63,6 +46,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Surge ya está instalado en la imagen Docker, por lo que no es necesario instalarlo
                     sh 'surge ./_build/ macalex.surge.sh --token $TOKEN'
                 }
             }
