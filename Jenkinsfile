@@ -30,7 +30,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'pip install html5validator '
+                    sh 'sh 'pip install --timeout=600 html5validator'
                 }
             }
         }
