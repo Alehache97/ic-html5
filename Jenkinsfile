@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'josedom24/debian-npm'  // Usa la imagen de Docker que ya tiene Surge instalado
+            image 'josedom24/debian-npm'
             args '-u root:root'
         }
     }
@@ -13,11 +13,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Alehache97/ic-html5.git'
+                git branch: 'master', url: 'https://github.com/javierasping/taller2_ic-html5.git'
             }
         }
-       
-        // Se eliminó la etapa de cambiar repositorios a HTTPS ya que no es necesaria.
        
         stage('Install Pip') {
             steps {
@@ -30,7 +28,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'sh 'pip install --timeout=600 html5validator'
+                    sh 'pip install html5validator '
                 }
             }
         }
@@ -46,7 +44,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Surge ya está instalado en la imagen Docker, por lo que no es necesario instalarlo
                     sh 'surge ./_build/ macalex.surge.sh --token $TOKEN'
                 }
             }
