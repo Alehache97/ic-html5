@@ -15,5 +15,5 @@ jobs:
         node-version: 18
     - name: Install surge
       run: npm install -g surge
-    - name: Deploy to josedom24@surge.sh
+    - name: Deploy to macale@surge.sh
       run: surge ./_build/ macale.surge.sh --token ${{ secrets.SURGE_TOKEN }}   
