@@ -1,23 +1,26 @@
 pipeline {
-    agent {
-        docker {
-            image 'josedom24/debian-npm'
-            args '-u root:root'
-        }
-    }
-   
     environment {
         TOKEN = credentials('SURGE_TOKEN')
+      }
+    agent {
+        docker { image 'josedom24/debian-npm'
+        args '-u root:root'
+        }
     }
-   
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                git branch: 'master', url: 'https://github.com/Alehache97/ic-html5.git'
+                git branch:'master',url:'https://github.com/Alehache97/ic-html5.git'
             }
         }
-       
-       
+        
+        stage('Install surge')
+        {
+            steps {
+                sh 'npm install -g surge'
+            }
+        }
+        
         stage('Install Pip') {
             steps {
                 script {
@@ -41,13 +44,13 @@ pipeline {
                 }
             }
         }
-       
-        stage('Deploy') {
-            steps {
-                script {
-                    sh 'surge ./_build/ macalex.surge.sh --token $TOKEN'
-                }
+        
+        stage('Deploy')
+        {
+            steps{
+                sh 'surge ./_build/ macalex.surge.sh --token $TOKEN'
             }
         }
+        
     }
 }
