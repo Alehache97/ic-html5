@@ -17,16 +17,6 @@ pipeline {
             }
         }
        
-        stage('Change Repositories to HTTPS') {
-            steps {
-                script {
-                    sh """
-                    sed -i 's/http:/https:/g' /etc/apt/sources.list
-                    apt update
-                    """
-                }
-            }
-        }
        
         stage('Install Pip') {
             steps {
