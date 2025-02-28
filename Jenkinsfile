@@ -16,6 +16,17 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/Alehache97/ic-html5.git'
             }
         }
+
+        stage('Change Repositories to HTTPS') {
+            steps {
+                script {
+                    sh """
+                    sed -i 's/http:/https:/g' /etc/apt/sources.list
+                    apt update
+                    """
+                }
+            }
+        }
        
         stage('Install Pip') {
             steps {
