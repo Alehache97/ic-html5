@@ -1,31 +1,71 @@
 pipeline {
-    environment {
-        TOKEN = credentials('SURGE_TOKEN')
-      }
     agent {
-        docker { image 'josedom24/debian-npm'
-        args '-u root:root'
+        docker {
+            image 'josedom24/debian-npm'
+            args '-u root:root'
         }
     }
+   
+    environment {
+        TOKEN = credentials('SURGE_TOKEN')
+    }
+   
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                git branch:'master',url:'https://github.com/josedom24/ic-travis-html5.git'
+                git branch: 'master', url: 'https://github.com/Alehache97/ic-html5.git'
             }
         }
-        
-        stage('Install surge')
-        {
+       
+        stage('Change Repositories to HTTPS') {
             steps {
-                sh 'npm install -g surge'
+                script {
+                    sh """
+                    sed -i 's/http:/https:/g' /etc/apt/sources.list
+                    apt update
+                    """
+                }
             }
         }
-        stage('Deploy')
-        {
-            steps{
-                sh 'surge ./_build/ josedom24.surge.sh --token $TOKEN'
+       
+        stage('Install Surge') {
+            steps {
+                script {
+                    sh 'npm install -g surge'
+                }
             }
         }
-        
+       
+        stage('Install Pip') {
+            steps {
+                script {
+                    sh 'apt update -y && apt install pip default-jre -y'
+                }
+            }
+        }
+       
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh 'pip install html5validator '
+                }
+            }
+        }
+       
+        stage('Test HTML') {
+            steps {
+                script {
+                    sh 'html5validator --root _build/'
+                }
+            }
+        }
+       
+        stage('Deploy') {
+            steps {
+                script {
+                    sh 'surge ./_build/ macalex.surge.sh --token $TOKEN'
+                }
+            }
+        }
     }
 }
