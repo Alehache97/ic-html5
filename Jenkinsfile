@@ -28,13 +28,13 @@ pipeline {
             }
         }
        
-        stage('Install Surge') {
-            steps {
-                script {
-                    sh 'npm install -g surge'
-                }
-            }
-        }
+#        stage('Install Surge') {
+#            steps {
+#                script {
+#                    sh 'npm install -g surge'
+#                }
+#            }
+#        }
        
         stage('Install Pip') {
             steps {
