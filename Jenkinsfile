@@ -15,6 +15,12 @@ pipeline {
             }
         }
 
+        stage('Install curl') {
+            steps {
+                sh 'apt update -y && apt install -y curl'
+            }
+        }
+
         stage('Check Connectivity') {
             steps {
                 sh 'curl -I https://registry.npmjs.org'
